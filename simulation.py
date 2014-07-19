@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import numpy as np
-import krige as k
+import kriging as k
 import random
 
 def gridpath( xdim, ydim ):
