@@ -11,7 +11,7 @@ u = [0.5,0.5]
 N = 2
 eps = 0.0001
 
-class KrigingTestCase( unittest.TestCase ):
+class SimpleKrigingTestCases( unittest.TestCase ):
 	'''Tests for kriging.py'''
 	
 	def test_simple_kriging_spherical_model( self ):
