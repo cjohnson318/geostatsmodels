@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import utilities as u
-import kriging as k
+import geostatsmodels.utilities as u
+import geostatsmodels.kriging as k
 
 # grab the data from cluster.dat
 d = u.readGeoEAS("cluster.dat")
