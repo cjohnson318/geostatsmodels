@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import utilities as u
-import kriging as k
-import simulation as s
+import geostatsmodels.utilities as u
+import geostatsmodels.kriging as k
+import geostatsmodels.simulation as s
 from pylab import *
 
 # read cluster.dat
