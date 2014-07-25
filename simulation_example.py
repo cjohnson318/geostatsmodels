@@ -4,6 +4,7 @@ import geostatsmodels.utilities as u
 import geostatsmodels.kriging as k
 import geostatsmodels.simulation as s
 from pylab import *
+import numpy as np
 
 # read cluster.dat
 d = u.readGeoEAS("cluster.dat")
