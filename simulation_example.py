@@ -12,9 +12,9 @@ d = u.readGeoEAS("cluster.dat")
 # take the first three columns
 d = d[:,:3]
 
-# define the distances and bandwidth 
+# define the lags and tolerance 
 # for the semivariogram modeling
-hs, bw = np.linspace( 0, 50, 10 ), 5
+lags, tol = np.linspace( 10, 50, 10 ), 5
 
 # if the data is not normally distributed,
 # perfrom a z-score transformation
