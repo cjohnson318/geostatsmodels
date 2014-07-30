@@ -168,8 +168,11 @@ def krige( P, model, lags, tol, u, N=0 ):
     # mean of the variable
     mu = np.mean( P[:,2] )
 
+    # u needs to be two dimensional for cdist()
+    if np.ndim( u ) == 1:
+        u = [u]
     # distance between u and each data point in P
-    d = cdist( P[:,:2], [u] )
+    d = cdist( P[:,:2], u )
     # add these distances to P
     P = np.hstack(( P, d ))
     # if N>0, take the N closest points,
@@ -181,6 +184,9 @@ def krige( P, model, lags, tol, u, N=0 ):
 
     # apply the covariance model to the distances
     k = covfct( P[:,3] )
+    # check for nan values in k
+    if np.any( np.isnan( k ) ):
+        raise ValueError('The vector of covariances, k, contains NaN values')
     # cast as a matrix
     k = np.matrix( k ).T
 
@@ -188,6 +194,9 @@ def krige( P, model, lags, tol, u, N=0 ):
     K = squareform( pdist( P[:,:2] ) )
     # apply the covariance model to these distances
     K = covfct( K.ravel() )
+    # check for nan values in K
+    if np.any( np.isnan( K ) ):
+        raise ValueError('The matrix of covariances, K, contains NaN values')
     # re-cast as a NumPy array -- thanks M.L.
     K = np.array( K )
     # reshape into an array
