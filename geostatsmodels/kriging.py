@@ -19,7 +19,7 @@ def set_of_points_at_lag_h( data, lag, tol ):
     # create a distance matrix
     p = squareform( pdist( data[:,:2] ) )
     # grab the coordinates in a given range: lag +/- tolerance
-    i, j = np.where( ( p >= lag - tol )&( p <= lag + tol ) )
+    i, j = np.where( ( p >= lag - tol )&( p < lag + tol ) )
     # zip the coordinates into a list
     ind = zip( i, j )
     # take out the repeated elements,
