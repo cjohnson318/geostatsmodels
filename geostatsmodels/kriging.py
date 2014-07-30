@@ -64,7 +64,7 @@ def C( P, lag, tol ):
     Calculate the sill
     '''
     c0 = np.var( P[:,2] )
-    if h == 0:
+    if lag == 0:
         return c0
     return c0 - semivariogram_at_lag_h( P, lag, tol )
 
