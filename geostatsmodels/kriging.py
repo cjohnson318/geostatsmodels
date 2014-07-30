@@ -21,11 +21,11 @@ def set_of_points_at_lag_h( data, lag, tol ):
     # grab the coordinates in a given range: lag +/- tolerance
     i, j = np.where( ( p >= lag - tol )&( p < lag + tol ) )
     # zip the coordinates into a list
-    ind = zip( i, j )
+    indices = zip( i, j )
     # take out the repeated elements,
     # since p is a *symmetric* distance matrix
-    ind = [ i for i in ind if i[1] > i[0] ]
-    return ind
+    indices = [ i for i in indices if i[1] > i[0] ]
+    return indices
 
 def semivariogram_at_lag_h( data, lag, tol ):
     '''
@@ -37,10 +37,10 @@ def semivariogram_at_lag_h( data, lag, tol ):
     '''
     # grab the indices of the points
     # that are lag +/- tolerance apart
-    ind = set_of_points_at_lag_h( data, lag, tol )
+    indices = set_of_points_at_lag_h( data, lag, tol )
     # take the squared difference between
     # the values of the variable of interest
-    z = [ ( data[i,2] - data[j,2] )**2.0 for i,j in ind ]
+    z = [ ( data[i,2] - data[j,2] )**2.0 for i,j in indices ]
     # half the mean squared difference
     z = np.mean( z ) / 2.0
     # return the semivariogram
