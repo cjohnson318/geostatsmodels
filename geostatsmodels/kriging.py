@@ -5,10 +5,6 @@ from pandas import DataFrame, Series
 from scipy.spatial.distance import pdist, cdist, squareform
 #from numba import jit
 
-'''
-NB: Took out C() in favor of covariance()
-
-'''
 
 def set_of_points_at_lag_h( data, lag, tol ):
     '''
