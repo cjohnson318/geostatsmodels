@@ -149,7 +149,7 @@ def cvmodel( P, model, lags, tol ):
     covfct = lambda h, a=param: C0 - model( h, a, C0 )
     return covfct
 
-def krige( P, model, lags, tol, u, N ):
+def krige( P, model, lags, tol, u, N=0 ):
     '''
     Input  (P)     ndarray, data
            (model) modeling function
@@ -159,8 +159,8 @@ def krige( P, model, lags, tol, u, N ):
            (lags)  kriging lag distances
            (tol)   kriging tolerance
            (u)     unsampled point
-           (N)     number of neighboring 
-                   points to consider
+           (N)     number of neighboring points
+                   to consider, if zero use all
     '''
 
     # covariance function
@@ -169,12 +169,15 @@ def krige( P, model, lags, tol, u, N ):
     mu = np.mean( P[:,2] )
 
     # distance between u and each data point in P
-    d = cdist( P[:,:2], u )
+    d = cdist( P[:,:2], [u] )
     # add these distances to P
-    P = np.vstack(( P.T, d )).T
-    # sort P by these distances
-    # take the first N of them
-    P = P[d.argsort()[:N]]
+    P = np.hstack(( P, d ))
+    # if N>0, take the N closest points,
+    if N > 0:
+        P = P[d[:,0].argsort()[:N]]
+    # otherwise, use all of the points
+    else:
+        N = len( P )
 
     # apply the covariance model to the distances
     k = covfct( P[:,3] )
