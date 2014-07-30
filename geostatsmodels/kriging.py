@@ -169,7 +169,7 @@ def krige( P, model, lags, tol, u, N ):
     mu = np.mean( P[:,2] )
 
     # distance between u and each data point in P
-	d = cdist( P[:,:2], u )
+    d = cdist( P[:,:2], u )
     # add these distances to P
     P = np.vstack(( P.T, d )).T
     # sort P by these distances
