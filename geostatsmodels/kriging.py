@@ -5,6 +5,11 @@ from pandas import DataFrame, Series
 from scipy.spatial.distance import pdist, cdist, squareform
 #from numba import jit
 
+'''
+NB: Took out C() in favor of covariance()
+
+'''
+
 def set_of_points_at_lag_h( data, lag, tol ):
     '''
     Input:  (data) NumPy array where the fris t two columns
@@ -27,13 +32,13 @@ def set_of_points_at_lag_h( data, lag, tol ):
     indices = [ i for i in indices if i[1] > i[0] ]
     return indices
 
-def semivariogram_at_lag_h( data, lag, tol ):
+def semivariance( data, lag, tol ):
     '''
     Input:  (data) NumPy array where the fris t two columns
                    are the spatial coordinates, x and y
             (lag)  the distance, h, between points
             (tol)  the tolerance we are comfortable with around (lag)
-    Output:  (z)   semivariogram value at lag (h) +/- (tol)  
+    Output:  (z)   semivariance value at lag (h) +/- (tol)  
     '''
     # grab the indices of the points
     # that are lag +/- tolerance apart
@@ -41,10 +46,8 @@ def semivariogram_at_lag_h( data, lag, tol ):
     # take the squared difference between
     # the values of the variable of interest
     z = [ ( data[i,2] - data[j,2] )**2.0 for i,j in indices ]
-    # half the mean squared difference
-    z = np.mean( z ) / 2.0
-    # return the semivariogram
-    return z
+    # the semivariance is half the mean squared difference
+    return np.mean( z ) / 2.0
 
 def semivariogram( data, lags, tol ):
     '''
@@ -55,18 +58,41 @@ def semivariogram( data, lags, tol ):
     Output: (sv)   <2xN> NumPy array of lags and semivariogram values
     '''
     # calculate the semivarigram at different lags given some tolerance
-    sv = [ semivariogram_at_lag_h( data, lag, tol ) for lag in lags ]
+    sv = [ semivariance( data, lag, tol ) for lag in lags ]
     # bundle the semivariogram values with their lags
     return np.array( zip( lags, sv ) ).T
- 
-def C( P, lag, tol ):
+
+def covariance( data, lag, tol ):
     '''
-    Calculate the sill
+    Input:  (data) NumPy array where the fris t two columns
+                   are the spatial coordinates, x and y
+            (lag)  the distance, h, between points
+            (tol)  the tolerance we are comfortable with around (lag)
+    Output:  (z)   covariance value at lag (h) +/- (tol)  
     '''
-    c0 = np.var( P[:,2] )
-    if lag == 0:
-        return c0
-    return c0 - semivariogram_at_lag_h( P, lag, tol )
+    if lag == 0.0:
+        return np.var( data[:,2] )
+    # grab the indices of the points
+    # that are lag +/- tolerance apart
+    indices = set_of_points_at_lag_h( data, lag, tol )
+    m_tail = np.mean( [ data[i,2] for i,j in indices ] )
+    m_head = np.mean( [ data[j,2] for i,j in indices ] )
+    m = m_tail * m_head
+    z = [ data[i,2]*data[j,2] - m for i,j in indices ]
+    return np.mean( z )
+    
+def covariogram( data, lags, tol ):
+    '''
+    Input:  (data) NumPy array where the fris t two columns
+                   are the spatial coordinates, x and y
+            (lag)  the distance, h, between points
+            (tol)  the tolerance we are comfortable with around (lag)
+    Output: (cv)   <2xN> NumPy array of lags and covariogram values
+    '''
+    # calculate the covarigram at different lags given some tolerance
+    cv = [ covariance( data, lag, tol ) for lag in lags ]
+    # bundle the covariogram values with their lags
+    return np.array( zip( lags, cv ) ).T
 
 def opt( fct, x, y, C0, parameterRange=None, meshSize=1000 ):
     '''
@@ -142,7 +168,7 @@ def cvmodel( P, model, lags, tol ):
     # calculate the semivariogram
     sv = semivariogram( P, lags, tol )
     # calculate the sill
-    C0 = C( P, lags[0], tol )
+    C0 = covariance( P, 0.0, tol )
     # calculate the optimal parameters
     param = opt( model, sv[0], sv[1], C0 )
     # return a covariance function
