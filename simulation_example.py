@@ -22,7 +22,7 @@ d, inv = u.to_norm( d )
 
 # perform sequential Gaussian simulation using
 # a spherical model, on a 5x5 grid
-m = s.sgs( d, k.spherical, hs, bw, 5, 5 )
+m = s.sgs( d, k.spherical, lags, tol, 5, 5 )
 
 # use the [:,::-1].T to a) reverse the order of the columns
 # and then b) transpose the data, this takes it from Python
