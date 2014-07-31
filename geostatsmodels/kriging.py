@@ -8,7 +8,7 @@ from scipy.spatial.distance import pdist, cdist, squareform
 
 def set_of_points_at_lag_h( data, lag, tol ):
     '''
-    Input:  (data) NumPy array where the fris t two columns
+    Input:  (data) NumPy array where the first two columns
                    are the spatial coordinates, x and y
             (lag)  the distance, h, between points
             (tol)  the tolerance we are comfortable with around (lag)
