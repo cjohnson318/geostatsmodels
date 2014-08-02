@@ -1,177 +1,9 @@
 #!/usr/bin/env python
-
 import numpy as np
-from pandas import DataFrame, Series
-from scipy.spatial.distance import pdist, cdist, squareform
-#from numba import jit
+from scipy.spatial.distance import cdist
+from geostatsmodels.utilities import pairwise
 
-
-def set_of_points_at_lag_h( data, lag, tol ):
-    '''
-    Input:  (data) NumPy array where the first two columns
-                   are the spatial coordinates, x and y
-            (lag)  the distance, h, between points
-            (tol)  the tolerance we are comfortable with around (lag)
-    Output: (ind)  list of tuples; the first element is the row of
-                   (data) for one point, the second element is the row 
-                   of a point (lag)+/-(tol) away from the first point,
-                   e.g., (3,5) corresponds fo data[3,:], and data[5,:]
-    '''
-    # create a distance matrix
-    p = squareform( pdist( data[:,:2] ) )
-    # grab the coordinates in a given range: lag +/- tolerance
-    i, j = np.where( ( p >= lag - tol )&( p < lag + tol ) )
-    # zip the coordinates into a list
-    indices = zip( i, j )
-    # take out the repeated elements,
-    # since p is a *symmetric* distance matrix
-    indices = [ i for i in indices if i[1] > i[0] ]
-    return indices
-
-def semivariance( data, lag, tol ):
-    '''
-    Input:  (data) NumPy array where the fris t two columns
-                   are the spatial coordinates, x and y
-            (lag)  the distance, h, between points
-            (tol)  the tolerance we are comfortable with around (lag)
-    Output:  (z)   semivariance value at lag (h) +/- (tol)  
-    '''
-    # grab the indices of the points
-    # that are lag +/- tolerance apart
-    indices = set_of_points_at_lag_h( data, lag, tol )
-    # take the squared difference between
-    # the values of the variable of interest
-    z = [ ( data[i,2] - data[j,2] )**2.0 for i,j in indices ]
-    # the semivariance is half the mean squared difference
-    return np.mean( z ) / 2.0
-
-def semivariogram( data, lags, tol ):
-    '''
-    Input:  (data) NumPy array where the fris t two columns
-                   are the spatial coordinates, x and y
-            (lag)  the distance, h, between points
-            (tol)  the tolerance we are comfortable with around (lag)
-    Output: (sv)   <2xN> NumPy array of lags and semivariogram values
-    '''
-    # calculate the semivarigram at different lags given some tolerance
-    sv = [ semivariance( data, lag, tol ) for lag in lags ]
-    # bundle the semivariogram values with their lags
-    return np.array( zip( lags, sv ) ).T
-
-def covariance( data, lag, tol ):
-    '''
-    Input:  (data) NumPy array where the fris t two columns
-                   are the spatial coordinates, x and y
-            (lag)  the distance, h, between points
-            (tol)  the tolerance we are comfortable with around (lag)
-    Output:  (z)   covariance value at lag (h) +/- (tol)  
-    '''
-    if lag == 0.0:
-        return np.var( data[:,2] )
-    # grab the indices of the points
-    # that are lag +/- tolerance apart
-    indices = set_of_points_at_lag_h( data, lag, tol )
-    m_tail = np.mean( [ data[i,2] for i,j in indices ] )
-    m_head = np.mean( [ data[j,2] for i,j in indices ] )
-    m = m_tail * m_head
-    z = [ data[i,2]*data[j,2] - m for i,j in indices ]
-    return np.mean( z )
-    
-def covariogram( data, lags, tol ):
-    '''
-    Input:  (data) NumPy array where the fris t two columns
-                   are the spatial coordinates, x and y
-            (lag)  the distance, h, between points
-            (tol)  the tolerance we are comfortable with around (lag)
-    Output: (cv)   <2xN> NumPy array of lags and covariogram values
-    '''
-    # calculate the covarigram at different lags given some tolerance
-    cv = [ covariance( data, lag, tol ) for lag in lags ]
-    # bundle the covariogram values with their lags
-    return np.array( zip( lags, cv ) ).T
-
-def opt( fct, x, y, C0, parameterRange=None, meshSize=1000 ):
-    '''
-    Optimize parameters for a model of the semivariogram
-    '''
-    if parameterRange == None:
-        parameterRange = [ x[1], x[-1] ]
-    mse = np.zeros( meshSize )
-    a = np.linspace( parameterRange[0], parameterRange[1], meshSize )
-    for i in range( meshSize ):
-        mse[i] = np.mean( ( y - fct( x, a[i], C0 ) )**2.0 )
-    return a[ mse.argmin() ]
-    
-def spherical( h, a, C0 ):
-    '''
-    Spherical model of the semivariogram
-    '''
-    # if h is a single digit
-    if type(h) == np.float64:
-        # calculate the spherical function
-        if h <= a:
-            return C0*( 1.5*h/a - 0.5*(h/a)**3.0 )
-        else:
-            return C0
-    # if h is an iterable
-    else:
-        # calcualte the spherical function for all elements
-        a = np.ones( h.size ) * a
-        C0 = np.ones( h.size ) * C0
-        return map( spherical, h, a, C0 )
-    
-def exponential( h, a, C0 ):
-    '''
-    Exponential model of the semivariogram
-    '''
-    # if h is a single digit
-    if type(h) == np.float64:
-        # calculate the exponential function
-        return C0*( 1.0 - np.exp( -3.0 * h / a ) )
-    # if h is an iterable
-    else:
-        # calcualte the exponential function for all elements
-        a = np.ones( h.size ) * a
-        C0 = np.ones( h.size ) * C0
-        return map( exponential, h, a, C0 )
-        
-def gaussian( h, a, C0 ):
-    '''
-    Gaussian model of the semivariogram
-    '''
-    # if h is a single digit
-    if type(h) == np.float64:
-        # calculate the Gaussian function
-        return C0*( 1.0 - np.exp( -3.0 * h**2.0 / a**2.0 ) )
-    # if h is an iterable
-    else:
-        # calcualte the Gaussian function for all elements
-        a = np.ones( h.size ) * a
-        C0 = np.ones( h.size ) * C0
-        return map( gaussian, h, a, C0 )
-         
-def cvmodel( P, model, lags, tol ):
-    '''
-    Input:  (P)      ndarray, data
-            (model)  modeling function
-                      - spherical
-                      - exponential
-                      - gaussian
-            (lags)   lag distances
-            (tol)    tolerance
-    Output: (covfct) function modeling the covariance
-    '''
-    # calculate the semivariogram
-    sv = semivariogram( P, lags, tol )
-    # calculate the sill
-    C0 = covariance( P, 0.0, tol )
-    # calculate the optimal parameters
-    param = opt( model, sv[0], sv[1], C0 )
-    # return a covariance function
-    covfct = lambda h, a=param: C0 - model( h, a, C0 )
-    return covfct
-
-def krige( P, model, lags, tol, u, N=0 ):
+def krige( data, covfct, lags, tol, u, N=0 ):
     '''
     Input  (P)     ndarray, data
            (model) modeling function
@@ -185,18 +17,16 @@ def krige( P, model, lags, tol, u, N=0 ):
                    to consider, if zero use all
     '''
 
-    # covariance function
-    covfct = cvmodel( P, model, lags, tol )
     # mean of the variable
-    mu = np.mean( P[:,2] )
+    mu = np.mean( data[:,2] )
 
     # u needs to be two dimensional for cdist()
     if np.ndim( u ) == 1:
         u = [u]
     # distance between u and each data point in P
-    d = cdist( P[:,:2], u )
+    d = cdist( data[:,:2], u )
     # add these distances to P
-    P = np.hstack(( P, d ))
+    P = np.hstack(( data, d ))
     # if N>0, take the N closest points,
     if N > 0:
         P = P[d[:,0].argsort()[:N]]
@@ -213,7 +43,7 @@ def krige( P, model, lags, tol, u, N=0 ):
     k = np.matrix( k ).T
 
     # form a matrix of distances between existing data points
-    K = squareform( pdist( P[:,:2] ) )
+    K = pairwise( P[:,:2] )
     # apply the covariance model to these distances
     K = covfct( K.ravel() )
     # check for nan values in K
@@ -235,6 +65,5 @@ def krige( P, model, lags, tol, u, N=0 ):
 
     # calculate the estimation
     estimation = np.dot( weights.T, residuals ) + mu
-    
+
     return float( estimation )
-    
