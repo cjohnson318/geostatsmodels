@@ -5,7 +5,6 @@ import scipy.stats
 import matplotlib
 from pylab import *
 from scipy.spatial.distance import pdist, squareform
-
 import geostatsmodels.variograms as v
 
 def readGeoEAS( fn ):
