@@ -78,22 +78,22 @@ def hscattergram( data, lag, tol, pwdist=None ):
 	tail = data[ indices[:,1], 2 ]
 	# create a scatterplot with equal axes
 	fig, ax = subplots()
-	ax.scatter( head, tail, marker="o", facecolor="none", edgecolor="b", alpha=0.5 )
-	ax.set_aspect("equal")
+	ax.scatter( head, tail, marker="o", facecolor="none", edgecolor="b", alpha=0.5 );
+	ax.set_aspect("equal");
 	# set the labels and the title
-	ax.set_ylabel("$z(u+h)$")
-	ax.set_xlabel("$z(u)$")
+	ax.set_ylabel("$z(u+h)$");
+	ax.set_xlabel("$z(u)$");
 	ax.set_title("Lags Between "+str(lag-tol)+" and "+str(lag+tol))
 	# grab the limits of the axes
-	xmin, xmax = ax.get_xlim()
-	ymin, ymax = ax.get_ylim()
+	xmin, xmax = ax.get_xlim();
+	ymin, ymax = ax.get_ylim();
 	# calculate the covariance and annotate
-	cv = v.covariance( data, indices )
-	ax.text( xmin*1.25, ymin*1.050, 'Covariance = {:3.2f}'.format(cv) )
+	cv = v.covariance( data, indices );
+	ax.text( xmin*1.25, ymin*1.050, 'Covariance = {:3.2f}'.format(cv) );
 	# calculate the semivariance and annotate
-	sv = v.semivariance( data, indices )
-	ax.text( xmin*1.25, ymin*1.025, 'Semivariance = {:3.2f}'.format(sv) )
-	show()	
+	sv = v.semivariance( data, indices );
+	ax.text( xmin*1.25, ymin*1.025, 'Semivariance = {:3.2f}'.format(sv) );
+	show();
 
 # this is a colormap that ranges from yellow to purple to black
 cdict = {'red':   ((0.0, 1.0, 1.0),
