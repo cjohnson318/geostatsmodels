@@ -42,3 +42,8 @@ pip uninstall geostatsmodels
 To update:
 
 pip install -U git+git://github.com/cjohnson318/geostatsmodels.git
+
+Usage
+------
+A notebook exploring some of the functionality of geostatsmodels is included in this repository.  More of these will follow.
+
