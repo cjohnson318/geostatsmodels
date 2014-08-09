@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 from scipy.spatial.distance import cdist
-from geostatsmodels.utilities import pairwise
+from utilities import pairwise
 
 def krige( data, covfct, lags, tol, u, N=0 ):
     '''
