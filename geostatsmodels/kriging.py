@@ -3,9 +3,9 @@ import numpy as np
 from scipy.spatial.distance import cdist
 from utilities import pairwise
 
-def krige( data, covfct, u, N=0 ):
+def kmatrices( data, covfct, u, N=0 ):
     '''
-    Input  (P)     ndarray, data
+    Input  (data)  ndarray, data
            (model) modeling function
                     - spherical
                     - exponential
@@ -14,10 +14,6 @@ def krige( data, covfct, u, N=0 ):
            (N)     number of neighboring points
                    to consider, if zero use all
     '''
-
-    # mean of the variable
-    mu = np.mean( data[:,2] )
-
     # u needs to be two dimensional for cdist()
     if np.ndim( u ) == 1:
         u = [u]
@@ -54,14 +50,54 @@ def krige( data, covfct, u, N=0 ):
     # cast as a matrix
     K = np.matrix( K )
 
+    return K, k, P
+
+def simple( data, covfct, u, N=0 ):
+    
+    # calculate the matrices K, and k
+    K, k, P = kmatrices( data, covfct, u, N )
+
     # calculate the kriging weights
     weights = np.linalg.inv( K ) * k
     weights = np.array( weights )
 
+    # mean of the variable
+    mu = np.mean( data[:,2] )
+    
     # calculate the residuals
     residuals = P[:,2] - mu
 
     # calculate the estimation
     estimation = np.dot( weights.T, residuals ) + mu
+
+    return float( estimation )
+
+def ordinary( data, covfct, u, N ):
+
+    # calculate the matrices K, and k
+    Ks, ks, P = kmatrices( data, covfct, u, N )
+
+    # add a column and row of ones to Ks,
+    # with a zero in the bottom, right hand corner
+    K = np.matrix( np.ones(( N+1, N+1 )) )
+    K[:N,:N] = Ks
+    K[-1,-1] = 0.0
+
+    # add a one to the end of ks
+    k = np.matrix( np.ones(( N+1,1 )) )
+    k[:N] = ks
+    
+    # calculate the kriging weights
+    weights = np.linalg.inv( K ) * k
+    weights = np.array( weights )
+
+    # mean of the variable
+    mu = np.mean( data[:,2] )
+    
+    # calculate the residuals
+    residuals = P[:,2]
+
+    # calculate the estimation
+    estimation = np.dot( weights[:-1].T, residuals )
 
     return float( estimation )
