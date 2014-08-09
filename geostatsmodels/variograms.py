@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
-import geostatsmodels.utilities as utilities
+import utilities
     
 def lagindices( pwdist, lag, tol ):
     '''
