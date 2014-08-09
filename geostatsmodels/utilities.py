@@ -5,7 +5,7 @@ import scipy.stats
 import matplotlib
 from pylab import *
 from scipy.spatial.distance import pdist, squareform
-import geostatsmodels.variograms as v
+import geostatsmodels.variograms as variograms
 
 def readGeoEAS( fn ):
     '''
@@ -70,9 +70,9 @@ def hscattergram( data, lag, tol, pwdist=None ):
 	# calculate the pairwise distances if they are not given
 	if pwdist == None:
 		pwdist = pairwise( data )
-		indices = v.lagindices( pwdist, lag, tol )
+		indices = variograms.lagindices( pwdist, lag, tol )
 	else:
-		indices = v.lagindices( data, lag, tol )
+		indices = variograms.lagindices( data, lag, tol )
 	# collect the head and tail measurements
 	head = data[ indices[:,0], 2 ]
 	tail = data[ indices[:,1], 2 ]
