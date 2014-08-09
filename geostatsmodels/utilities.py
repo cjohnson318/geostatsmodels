@@ -56,44 +56,44 @@ def pairwise( data ):
     return squareform( pdist( data[:,:2] ) )
     
 def hscattergram( data, lag, tol, pwdist=None ):
-	'''
-	Input:  (data)    NumPy array with three columns, the first two 
-	                  columns should be the x and y coordinates, and the 
-	                  third should be the measurements of the variable
-	                  of interest
-	        (lag)     the lagged distance of interest
-	        (tol)     the allowable tolerance about (lag)
-	        (pwdist)  a square pairwise distance matrix
-	Output:           h-scattergram figure showing the distribution of
-	                  measurements taken at a certain lag and tolerance    
-	'''
-	# calculate the pairwise distances if they are not given
-	if pwdist == None:
-		pwdist = pairwise( data )
-		indices = variograms.lagindices( pwdist, lag, tol )
-	else:
-		indices = variograms.lagindices( data, lag, tol )
-	# collect the head and tail measurements
-	head = data[ indices[:,0], 2 ]
-	tail = data[ indices[:,1], 2 ]
-	# create a scatterplot with equal axes
-	fig, ax = subplots()
-	ax.scatter( head, tail, marker="o", facecolor="none", edgecolor="b", alpha=0.5 );
-	ax.set_aspect("equal");
-	# set the labels and the title
-	ax.set_ylabel("$z(u+h)$");
-	ax.set_xlabel("$z(u)$");
-	ax.set_title("Lags Between "+str(lag-tol)+" and "+str(lag+tol))
-	# grab the limits of the axes
-	xmin, xmax = ax.get_xlim();
-	ymin, ymax = ax.get_ylim();
-	# calculate the covariance and annotate
-	cv = variograms.covariance( data, indices );
-	ax.text( xmin*1.25, ymin*1.050, 'Covariance = {:3.2f}'.format(cv) );
-	# calculate the semivariance and annotate
-	sv = variograms.semivariance( data, indices );
-	ax.text( xmin*1.25, ymin*1.025, 'Semivariance = {:3.2f}'.format(sv) );
-	show();
+    '''
+    Input:  (data)    NumPy array with three columns, the first two 
+                      columns should be the x and y coordinates, and 
+                      third should be the measurements of the variable
+                      of interest
+            (lag)     the lagged distance of interest
+            (tol)     the allowable tolerance about (lag)
+            (pwdist)  a square pairwise distance matrix
+    Output:           h-scattergram figure showing the distribution of
+                      measurements taken at a certain lag and tolerance
+    '''
+    # calculate the pairwise distances if they are not given
+    if pwdist == None:
+	pwdist = pairwise( data )
+	indices = variograms.lagindices( pwdist, lag, tol )
+    else:
+	indices = variograms.lagindices( data, lag, tol )
+    # collect the head and tail measurements
+    head = data[ indices[:,0], 2 ]
+    tail = data[ indices[:,1], 2 ]
+    # create a scatterplot with equal axes
+    fig, ax = subplots()
+    ax.scatter( head, tail, marker="o", facecolor="none", edgecolor="b", alpha=0.5 );
+    ax.set_aspect("equal");
+    # set the labels and the title
+    ax.set_ylabel("$z(u+h)$");
+    ax.set_xlabel("$z(u)$");
+    ax.set_title("Lags Between "+str(lag-tol)+" and "+str(lag+tol))
+    # grab the limits of the axes
+    xmin, xmax = ax.get_xlim();
+    ymin, ymax = ax.get_ylim();
+    # calculate the covariance and annotate
+    cv = variograms.covariance( data, indices );
+    ax.text( xmin*1.25, ymin*1.050, 'Covariance = {:3.2f}'.format(cv) );
+    # calculate the semivariance and annotate
+    sv = variograms.semivariance( data, indices );
+    ax.text( xmin*1.25, ymin*1.025, 'Semivariance = {:3.2f}'.format(sv) );
+    show();
 
 # this is a colormap that ranges from yellow to purple to black
 cdict = {'red':   ((0.0, 1.0, 1.0),
