@@ -1,7 +1,5 @@
 import numpy as np
-from scipy.spatial.distance import pdist, cdist, squareform
-
-import variograms as v
+import variograms
 
 def opt( fct, x, y, c, parameterRange=None, meshSize=1000 ):
     '''
@@ -75,7 +73,7 @@ def covmodel( data, model, lags, tol ):
     Output: (covfct) function modeling the covariance
     '''
     # calculate the semivariogram
-    sv = v.semivariogram( data, lags, tol )
+    sv = variograms.semivariogram( data, lags, tol )
     # calculate the sill
     c = np.var( data[:,2] )
     # calculate the optimal parameters
