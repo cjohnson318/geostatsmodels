@@ -21,6 +21,6 @@ covfct = m.covmodel( data, m.gaussian, lags, tol )
 z = [ 25.0, 25.0 ]
 
 # pass that function to the kriging unction
-kv = nk.krige( data, covfct, lags, tol, z )
+kv = k.krige( data, covfct, lags, tol, z )
 
 print kv
