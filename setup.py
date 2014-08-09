@@ -7,5 +7,4 @@ setup(name='geostatsmodels',
       author_email='connor.labaume.johnson@gmail.com',
       url='https://github.com/cjohnson318/geostatsmodels',
       packages=['geostatsmodels'],
-      scripts = ['kriging_example.py','simulation_example.py'],
 )
