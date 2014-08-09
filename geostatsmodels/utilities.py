@@ -88,10 +88,10 @@ def hscattergram( data, lag, tol, pwdist=None ):
 	xmin, xmax = ax.get_xlim();
 	ymin, ymax = ax.get_ylim();
 	# calculate the covariance and annotate
-	cv = v.covariance( data, indices );
+	cv = variograms.covariance( data, indices );
 	ax.text( xmin*1.25, ymin*1.050, 'Covariance = {:3.2f}'.format(cv) );
 	# calculate the semivariance and annotate
-	sv = v.semivariance( data, indices );
+	sv = variograms.semivariance( data, indices );
 	ax.text( xmin*1.25, ymin*1.025, 'Semivariance = {:3.2f}'.format(sv) );
 	show();
 
