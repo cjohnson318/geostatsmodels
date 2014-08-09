@@ -1,5 +1,5 @@
 import numpy as np
-import geostatsmodels.variograms as variograms
+import variograms
 
 def opt( fct, x, y, c, parameterRange=None, meshSize=1000 ):
     '''
