@@ -45,5 +45,9 @@ pip install -U git+git://github.com/cjohnson318/geostatsmodels.git
 
 Usage
 ------
-A notebook exploring some of the functionality of geostatsmodels is included in this repository.  More of these will follow.
+A notebook exploring some of the functionality of geostatsmodels is included in this repository.  
+
+http://nbviewer.ipython.org/github/cjohnson318/geostatsmodels/blob/master/notebooks/VariogramAnalysis.ipynb
+
+More of these will follow.
 
