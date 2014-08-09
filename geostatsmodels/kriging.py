@@ -3,15 +3,13 @@ import numpy as np
 from scipy.spatial.distance import cdist
 from utilities import pairwise
 
-def krige( data, covfct, lags, tol, u, N=0 ):
+def krige( data, covfct, u, N=0 ):
     '''
     Input  (P)     ndarray, data
            (model) modeling function
                     - spherical
                     - exponential
                     - gaussian
-           (lags)  kriging lag distances
-           (tol)   kriging tolerance
            (u)     unsampled point
            (N)     number of neighboring points
                    to consider, if zero use all
