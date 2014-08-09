@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
-
+import utilities
+    
 def lagindices( pwdist, lag, tol ):
     '''
     Input:  (pwdist) square NumPy array of pairwise distances
@@ -16,7 +17,7 @@ def lagindices( pwdist, lag, tol ):
     # zip the coordinates into a list
     indices = zip( i, j )
     # take out the repeated elements,
-    # since pwdist is a *symmetric* distance matrix
+    # since p is a *symmetric* distance matrix
     indices = np.array([ i for i in indices if i[1] > i[0] ])
     return indices
 
@@ -40,7 +41,7 @@ def semivariogram( data, lags, tol ):
                    are the spatial coordinates, x and y
             (lag)  the distance, h, between points
             (tol)  the tolerance we are comfortable with around (lag)
-    Output:        <2xN> NumPy array of lags and semivariogram values
+    Output: (sv)   <2xN> NumPy array of lags and semivariogram values
     '''
     return variogram( data, lags, tol, 'semivariogram' )
 
@@ -66,7 +67,7 @@ def covariogram( data, lags, tol ):
                    are the spatial coordinates, x and y
             (lag)  the distance, h, between points
             (tol)  the tolerance we are comfortable with around (lag)
-    Output:        <2xN> NumPy array of lags and covariogram values
+    Output: (cv)   <2xN> NumPy array of lags and covariogram values
     '''
     return variogram( data, lags, tol, 'covariogram' )
 
@@ -80,7 +81,7 @@ def variogram( data, lags, tol, method ):
     Output: (cv)   <2xN> NumPy array of lags and variogram values
     '''
     # calculate the pairwise distances
-    pwdist = u.pairwise( data )
+    pwdist = utilities.pairwise( data )
     # create a list of lists of indices of points having the ~same lag
     index = [ lagindices( pwdist, lag, tol ) for lag in lags ]
     # calculate the variogram at different lags given some tolerance
@@ -90,4 +91,3 @@ def variogram( data, lags, tol, method ):
         v = [ covariance( data, indices ) for indices in index ]
     # bundle the semivariogram values with their lags
     return np.array( zip( lags, v ) ).T
-
