@@ -47,7 +47,9 @@ Usage
 ------
 A notebook exploring some of the functionality of geostatsmodels is included in this repository.  
 
-http://nbviewer.ipython.org/github/cjohnson318/geostatsmodels/blob/master/notebooks/VariogramAnalysis.ipynb
+[Variogram Analysis](http://nbviewer.ipython.org/github/cjohnson318/geostatsmodels/blob/master/notebooks/VariogramAnalysis.ipynb)
+
+[Kriging Example](http://nbviewer.ipython.org/github/cjohnson318/geostatsmodels/blob/master/notebooks/KrigingExample.ipynb)
 
 More of these will follow.
 
