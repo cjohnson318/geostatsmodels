@@ -75,7 +75,13 @@ def power( h, w, c ):
     '''
     return c*h**w
 
-def model( fct, param ):  
+def model( fct, param ): 
+    '''
+    Input:  (fct)   function that takes data and parameters
+            (param) list or tuple of parameters
+    Output: (inner) function that only takes data as input
+                    parameters are set internally
+    '''
     def inner( h ):
         return fct(h,*param)
     return inner
