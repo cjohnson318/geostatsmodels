@@ -12,56 +12,75 @@ def opt( fct, x, y, c, parameterRange=None, meshSize=1000 ):
     for i in range( meshSize ):
         mse[i] = np.mean( ( y - fct( x, a[i], c ) )**2.0 )
     return a[ mse.argmin() ]
+    
+def typetest( h, a, lta, gta ):
+    # if `h` is a numpy ndarray, then..
+    try:
+        # apply lta() to elements less than a
+        lt = lta( h[ np.where( h <= a ) ] )
+        # apply gta() to elements greater than a
+        gt = gta( h[ np.where( h > a ) ] )
+        return np.hstack((lt,gt))
+    # otherwise, if h is a scalar..
+    except TypeError:
+        if h <= a:
+            return lta( h )
+        else:
+            return gta( h )
+        
+def nugget( h, a, c ):
+    '''
+    Nugget model of the semivariogram
+    '''
+    c = float(c)
+    lta = lambda x: 0+x*0
+    gta = lambda x: c+x*0
+    return typetest( h, 0, lta, gta )
+
+def linear( h, a, c ):
+    '''
+    Linear model of the semivariogram
+    '''
+    a, c = float(a), float(c)
+    lta = lambda x: (c/a)*x
+    gta = lambda x: c+x*0
+    return typetest( h, a, lta, gta )
 
 def spherical( h, a, c ):
     '''
     Spherical model of the semivariogram
     '''
-    # if h is a single digit
-    if type(h) == np.float64:
-        # calculate the spherical function
-        if h <= a:
-            return c*( 1.5*h/a - 0.5*(h/a)**3.0 )
-        else:
-            return c
-    # if h is an iterable
-    else:
-        # calcualte the spherical function for all elements
-        a = np.ones( h.size ) * a
-        c = np.ones( h.size ) * c
-        return map( spherical, h, a, c )
+    a, c = float(a), float(c)
+    lta = lambda x: c*( 1.5*(x/a) - 0.5*(x/a)**3.0 )
+    gta = lambda x: c+x*0
+    return typetest( h, a, lta, gta )
 
 def exponential( h, a, c ):
     '''
     Exponential model of the semivariogram
     '''
-    # if h is a single digit
-    if type(h) == np.float64:
-        # calculate the exponential function
-        return c*( 1.0 - np.exp( -3.0 * h / a ) )
-    # if h is an iterable
-    else:
-        # calcualte the exponential function for all elements
-        a = np.ones( h.size ) * a
-        c = np.ones( h.size ) * c
-        return map( exponential, h, a, c )
+    a, c = float( a ), float( c )
+    return c*( 1.0 - np.exp( -3.0*h/a ) )
 
 def gaussian( h, a, c ):
     '''
     Gaussian model of the semivariogram
     '''
-    # if h is a single digit
-    if type(h) == np.float64:
-        # calculate the Gaussian function
-        return c*( 1.0 - np.exp( -3.0 * h**2.0 / a**2.0 ) )
-    # if h is an iterable
-    else:
-        # calcualte the Gaussian function for all elements
-        a = np.ones( h.size ) * a
-        c = np.ones( h.size ) * c
-        return map( gaussian, h, a, c )
+    a, c = float( a ), float( c )
+    return c*( 1.0 - np.exp( -3.0*h**2.0/a**2.0 ) )
+    
+def power( h, w, c ):
+    '''
+    Power model of the semivariogram
+    '''
+    return c*h**w
 
-def covmodel( data, model, lags, tol ):
+def model( fct, param ):  
+    def inner( h ):
+        return fct(h,*param)
+    return inner
+
+def fitmodel( data, fct, lags, tol ):
     '''
     Input:  (P)      ndarray, data
             (model)  modeling function
@@ -77,7 +96,7 @@ def covmodel( data, model, lags, tol ):
     # calculate the sill
     c = np.var( data[:,2] )
     # calculate the optimal parameters
-    param = opt( model, sv[0], sv[1], c )
+    a = opt( fct, sv[0], sv[1], c )
     # return a covariance function
-    covfct = lambda h, a=param: c - model( h, a, c )
+    covfct = model( fct, ( a, c ) )
     return covfct
