@@ -14,14 +14,21 @@ def opt( fct, x, y, c, parameterRange=None, meshSize=1000 ):
     return a[ mse.argmin() ]
     
 def typetest( h, a, lta, gta ):
-    # if `h` is a numpy ndarray, then..
+    '''
+    Input:  (h)   scalar or NumPy ndarray
+            (a)   scalar representing the range parameter
+            (lta) function to perfrom for values less than (a)
+            (gta) function to perform for values greater than (a)
+    Output:       scalar or array, depending on (h)
+    '''
+    # if (h) is a numpy ndarray, then..
     try:
         # apply lta() to elements less than a
         lt = lta( h[ np.where( h <= a ) ] )
         # apply gta() to elements greater than a
         gt = gta( h[ np.where( h > a ) ] )
         return np.hstack((lt,gt))
-    # otherwise, if h is a scalar..
+    # otherwise, if (h) is a scalar..
     except TypeError:
         if h <= a:
             return lta( h )
