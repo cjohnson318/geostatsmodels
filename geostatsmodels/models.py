@@ -92,6 +92,17 @@ def model( fct, param ):
     def inner( h ):
         return fct(h,*param)
     return inner
+    
+def covmodel( fct, param ): 
+    '''
+    Input:  (fct)   function that takes data and parameters
+            (param) list or tuple of parameters
+    Output: (inner) function that only takes data as input
+                    parameters are set internally
+    '''
+    def inner( h ):
+        return param[-1] - fct(h,*param)
+    return inner
 
 def fitmodel( data, fct, lags, tol ):
     '''
@@ -111,5 +122,5 @@ def fitmodel( data, fct, lags, tol ):
     # calculate the optimal parameters
     a = opt( fct, sv[0], sv[1], c )
     # return a covariance function
-    covfct = model( fct, ( a, c ) )
+    covfct = covmodel( fct, ( a, c ) )
     return covfct
