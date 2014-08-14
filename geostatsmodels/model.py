@@ -82,7 +82,7 @@ def power( h, w, c ):
     '''
     return c*h**w
 
-def model( fct, param ): 
+def semivariogram( fct, param ): 
     '''
     Input:  (fct)   function that takes data and parameters
             (param) list or tuple of parameters
@@ -93,7 +93,7 @@ def model( fct, param ):
         return fct(h,*param)
     return inner
     
-def covmodel( fct, param ): 
+def covariance( fct, param ): 
     '''
     Input:  (fct)   function that takes data and parameters
             (param) list or tuple of parameters
