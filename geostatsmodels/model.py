@@ -82,7 +82,7 @@ def power( h, w, c ):
     '''
     return c*h**w
 
-def semivariogram( fct, param ): 
+def semivariance( fct, param ): 
     '''
     Input:  (fct)   function that takes data and parameters
             (param) list or tuple of parameters
