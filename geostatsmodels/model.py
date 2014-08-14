@@ -122,5 +122,5 @@ def fitmodel( data, fct, lags, tol ):
     # calculate the optimal parameters
     a = opt( fct, sv[0], sv[1], c )
     # return a covariance function
-    covfct = covmodel( fct, ( a, c ) )
+    covfct = covariance( fct, ( a, c ) )
     return covfct
