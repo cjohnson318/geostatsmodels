@@ -52,7 +52,7 @@ def kmatrices( data, covfct, u, N=0 ):
 
     return K, k, P
 
-def simple( data, covfct, u, N=0 ):
+def simple( data, covfct, u, N=0, nugget=0 ):
     
     # calculate the matrices K, and k
     K, k, P = kmatrices( data, covfct, u, N )
@@ -60,6 +60,10 @@ def simple( data, covfct, u, N=0 ):
     # calculate the kriging weights
     weights = np.linalg.inv( K ) * k
     weights = np.array( weights )
+
+    # calculate k' * K * k for
+    # the kriging variance
+    kvar = k.T * weights
 
     # mean of the variable
     mu = np.mean( data[:,2] )
@@ -70,12 +74,22 @@ def simple( data, covfct, u, N=0 ):
     # calculate the estimation
     estimation = np.dot( weights.T, residuals ) + mu
 
-    return float( estimation )
+    # calculate the sill and the 
+    # kriging standard deviation
+    sill = np.var( data[:,2] )
+    kvar = float( sill + nugget - kvar )
+    kstd = np.sqrt( kvar )
 
-def ordinary( data, covfct, u, N ):
+    return float( estimation ), kstd
+
+def ordinary( data, covfct, u, N=0, nugget=0 ):
 
     # calculate the matrices K, and k
     Ks, ks, P = kmatrices( data, covfct, u, N )
+
+    # if N is not set, determine from Ks
+    if N == 0:
+        N, N = Ks.shape
 
     # add a column and row of ones to Ks,
     # with a zero in the bottom, right hand corner
@@ -91,6 +105,10 @@ def ordinary( data, covfct, u, N ):
     weights = np.linalg.inv( K ) * k
     weights = np.array( weights )
 
+    # calculate k' * K * k for
+    # the kriging variance
+    kvar = k.T * weights
+
     # mean of the variable
     mu = np.mean( data[:,2] )
     
@@ -100,4 +118,9 @@ def ordinary( data, covfct, u, N ):
     # calculate the estimation
     estimation = np.dot( weights[:-1].T, residuals )
 
-    return float( estimation )
+    # calculate the sill and the kriging standard deviation
+    sill = np.var( data[:,2] )
+    kvar = float( sill + nugget - kvar )
+    kstd = np.sqrt( kvar )
+
+    return float( estimation ), kstd
