@@ -122,6 +122,31 @@ def laghistogram( data, lags, tol, pwdist=None ):
     ax.set_title('Lag Histogram')
     show();
 
+def svplot( data, lags, tol, model=None ):
+    '''
+    Input:  (data)    NumPy array with three columns, the first two 
+                      columns should be the x and y coordinates, and 
+                      third should be the measurements of the variable
+                      of interest
+            (lags)    the lagged distance of interest
+            (tol)     the allowable tolerance about (lag)
+            (model)   model function taking a distance and returning
+                      an approximation of the semivariance
+    Output:           empirical semivariogram
+    '''
+    h, sv = variograms.semivariogram( data, lags, tol )
+    sill = np.var( data[:,2] )
+    fig, ax = subplots()
+    if model:
+        ax.plot( h, model(h), 'r' )
+    ax.plot( h, sv, 'ko-' )
+    ax.set_ylabel('Semivariance')
+    ax.set_xlabel('Lag Distance')
+    ax.set_title('Semivariogram')
+    ax.text( tolerance*3, sill*1.025, str( np.round( sill, decimals=3 ) ) )
+    ax.axhline( sill, ls='--', color='k' )
+    show();
+
 # this is a colormap that ranges from yellow to purple to black
 cdict = {'red':   ((0.0, 1.0, 1.0),
                    (0.5, 225/255., 225/255. ),
