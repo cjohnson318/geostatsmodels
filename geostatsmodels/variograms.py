@@ -32,8 +32,6 @@ def anilagindices( data, pwdist, lag, tol, angle, atol ):
             (angle)  float, [0,360), North = 0 --> 360 clockwise
             (atol)   number of degrees about (angle) to consider
     '''
-    if pwdist == None:
-        pwdist = utilities.pairwise( data )
     index = lagindices( pwdist, lag, tol )
     brngs = utilities.bearings( data, index )
     bridx = zip( brngs, index )
