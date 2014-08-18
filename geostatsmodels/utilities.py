@@ -198,6 +198,33 @@ def bearings( data, indices ):
     # we have a list of lag-sets containing bearings
     return [ [ bearing( *data[ idx ] ) for idx in lag ] for lag in indices ]
 
+def inangle( theta, angle, atol ):
+    '''
+    Input:  (theta) angle inquestion
+            (angle) reference angle
+            (atol)  tolerance about (angle)
+    Output:         True or False, depending on whether
+                    theta is in [angle-atol,angle+atol)
+    '''
+    lower = angle - atol
+    upper = angle + atol
+    if( lower >= 0 )&( upper <= 360 ):
+        if( theta >= lower )&( theta < upper ):
+            return True
+    if( lower < 0 ):
+        lower %= 360
+        if( theta > upper )&( theta >= lower ):
+            return True
+        elif( theta >= 0 )&( theta < upper ):
+            return True
+    if( upper > 360 ):
+        upper %= 360
+        if( theta >= lower )&( theta < 0 ):
+            return True
+        if( theta >= 0 )&( theta < upper ):
+            return True
+    return False
+
 # this is a colormap that ranges from yellow to purple to black
 cdict = {'red':   ((0.0, 1.0, 1.0),
                    (0.5, 225/255., 225/255. ),
