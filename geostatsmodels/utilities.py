@@ -224,6 +224,37 @@ def inangle( theta, angle, atol ):
         if( theta >= 0 )&( theta < upper ):
             return True
     return False
+    
+def spaniplot( data, pwdist, lag, tol, angle, atol ):
+    '''
+    SPatial ANIotropy PLOT
+    '''
+    index = variograms.lagindices( pwdist, lag, tol )
+    anindex = variograms.anilagindices( data, pwdist, lag, tol, angle, atol )
+    
+    fig, ax = subplots()
+
+    # plot the lagged distances
+    for pair in index:
+        head, tail = z[pair]
+        hx, hy, hz = head
+        tx, ty, tz = tail
+        x = [ hx, tx ]
+        y = [ hy, ty ]
+        ax.plot( x, y, 'k-', lw=2, alpha=0.25 )
+        
+    # plot the lagged distances within 
+    # the anisotropy angle and tolerance
+    for pair in anindex:
+        head, tail = z[pair]
+        hx, hy, hz = head
+        tx, ty, tz = tail
+        x = [ hx, tx ]
+        y = [ hy, ty ]
+        ax.plot( x, y, 'r-', lw=1 )
+        
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
 
 # this is a colormap that ranges from yellow to purple to black
 cdict = {'red':   ((0.0, 1.0, 1.0),
