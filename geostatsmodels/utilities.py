@@ -143,7 +143,7 @@ def svplot( data, lags, tol, model=None ):
     ax.set_ylabel('Semivariance')
     ax.set_xlabel('Lag Distance')
     ax.set_title('Semivariogram')
-    ax.text( tolerance*3, sill*1.025, str( np.round( sill, decimals=3 ) ) )
+    ax.text( tol*3, sill*1.025, str( np.round( sill, decimals=3 ) ) )
     ax.axhline( sill, ls='--', color='k' )
     show();
 
