@@ -95,6 +95,33 @@ def hscattergram( data, lag, tol, pwdist=None ):
     ax.text( xmin*1.25, ymin*1.025, 'Semivariance = {:3.2f}'.format(sv) );
     show();
 
+def laghistogram( data, lags, tol, pwdist=None ):
+    '''
+    Input:  (data)    NumPy array with three columns, the first two 
+                      columns should be the x and y coordinates, and 
+                      third should be the measurements of the variable
+                      of interest
+            (lags)    the lagged distance of interest
+            (tol)     the allowable tolerance about (lag)
+            (pwdist)  the pairwise distances, optional
+    Output:           lag histogram figure showing the number of
+                      distances at each lag
+    '''
+    # calculate the pairwise distances if they are not given
+    if pwdist == None:
+        pwdist = pairwise( data[:,:2] )
+    # collect the distances at each lag
+    indices = [ variograms.lagindices( pwdist, lag, tol ) for lag in lags ]
+    # record the number of indices at each lag
+    indices = [ len( i ) for i in indices ]
+    # create a bar plot
+    fig, ax = subplots()
+    ax.bar( lags+tol, indices )
+    ax.set_ylabel('Number of Lags')
+    ax.set_xlabel('Lag Distance')
+    ax.set_title('Lag Histogram')
+    show();
+
 # this is a colormap that ranges from yellow to purple to black
 cdict = {'red':   ((0.0, 1.0, 1.0),
                    (0.5, 225/255., 225/255. ),
