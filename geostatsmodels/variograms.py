@@ -20,6 +20,25 @@ def lagindices( pwdist, lag, tol ):
     # since p is a *symmetric* distance matrix
     indices = np.array([ i for i in indices if i[1] > i[0] ])
     return indices
+    
+def anilagindices( data, pwdist, lag, tol, angle, atol ):
+    '''
+    Input:  (data)   NumPy array where the fris t two columns
+                     are the spatial coordinates, x and y, and
+                     the third column is the variable of interest
+            (pwdist) square NumPy array of pairwise distances
+            (lag)    the distance, h, between points
+            (tol)    the tolerance we are comfortable with around (lag)
+            (angle)  float, [0,360), North = 0 --> 360 clockwise
+            (atol)   number of degrees about (angle) to consider
+    '''
+    if pwdist == None:
+        pwdist = utilities.pairwise( data )
+    index = lagindices( pwdist, lag, tol )
+    brngs = utilities.bearings( data, index )
+    bridx = zip( brngs, index )
+    index = [ idx for br, idx in bridx if utilities.inangle( br, angle, atol ) ]
+    return index
 
 def semivariance( data, indices ):
     '''
