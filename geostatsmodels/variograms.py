@@ -38,6 +38,9 @@ def anilagindices( data, pwdist, lag, tol, angle, atol ):
     brngs = utilities.bearings( data, index )
     bridx = zip( brngs, index )
     index = [ idx for br, idx in bridx if utilities.inangle( br, angle, atol ) ]
+    # add 180 to the angle and take the modulus
+    angle = ( angle + 180 ) % 360
+    index += [ idx for br, idx in bridx if utilities.inangle( br, angle, atol ) ]
     return index
 
 def semivariance( data, indices ):
