@@ -146,6 +146,57 @@ def svplot( data, lags, tol, model=None ):
     ax.text( tol*3, sill*1.025, str( np.round( sill, decimals=3 ) ) )
     ax.axhline( sill, ls='--', color='k' )
     show();
+    
+def bearing( p0, p1 ):
+    '''
+    Input:  (p0,p1) two iterables representing x and y coordinates
+    Output:         the bearing, a degree in the range [0,360) from
+                    due North clockwise aroung the compass face
+    '''
+    y = p1[1] - p0[1]
+    x = p1[0] - p0[0]
+    rad, deg = None, None
+    if x != 0:
+        rad = np.arctan( y / float( x ) )
+        deg = np.rad2deg( rad )
+    else:
+        if y > 0:
+            deg = 90
+        elif y < 0:
+            deg = 270
+    if( x < 0 )&( y > 0 ):
+        deg = 180 + deg
+    elif( x < 0 )&( y < 0 ):
+        deg = 270 - deg
+    elif( x > 0 )&( y < 0 ):
+        deg = 360 + deg
+    bearing = None
+    if( deg >= 0 )&( deg <= 90 ):
+        bearing = 90 - deg
+    elif( deg >= 90 )&( deg < 180 ):
+        bearing = 90 + 360 - deg
+    elif( deg >= 180 )&( deg < 270 ):
+        bearing = 90 + 360 - deg
+    elif( deg >= 270 )&( deg <= 360 ):
+        bearing = 90 + 360 - deg
+    return bearing
+
+def bearings( data, indices ):
+    '''
+    Input:  (data)    the original data set: x, y, variable
+            (indices) the output of variograms.lagindices()
+    Output:           a list of list of bearings corresponding
+                      to variograms.lagindices()
+    '''
+    # indices is a list of lists
+    # each list in indices represents a set of points at a certain lag
+    # for a given lag, we have a list of index pairs
+    # each pair represents the indices of two points in the data set having a given lag
+    # --deep breath--
+    # for each lag-set, we go through all of the index-pairs, and calculate the bearing
+    # in the end, instead of a list of lag-sets containing index-pairs,
+    # we have a list of lag-sets containing bearings
+    return [ [ bearing( *data[ idx ] ) for idx in lag ] for lag in indices ]
 
 # this is a colormap that ranges from yellow to purple to black
 cdict = {'red':   ((0.0, 1.0, 1.0),
