@@ -1,11 +1,7 @@
 #!/usr/bin/env python
-import scipy
-import numpy as np
-import scipy.stats
-import matplotlib
-from pylab import *
+
+import scipy, scipy.stats, numpy as np
 from scipy.spatial.distance import pdist, squareform
-import variograms
 
 def readGeoEAS( fn ):
     '''
@@ -54,8 +50,6 @@ def pairwise( data ):
         print "You have more than 10,000 data points, this might take a minute."
     # return the square distance matrix
     return squareform( pdist( data[:,:2] ) )
-    
-
     
 def bearing( p0, p1 ):
     '''
