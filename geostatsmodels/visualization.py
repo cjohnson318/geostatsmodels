@@ -39,21 +39,18 @@ def hscattergram( data, pwdist, lag, tol ):
     ax.text( xmin*1.25, ymin*1.025, 'Semivariance = {:3.2f}'.format(sv) );
     show();
 
-def laghistogram( data, lags, tol, pwdist=None ):
+def laghistogram( data, pwdist, lags, tol ):
     '''
     Input:  (data)    NumPy array with three columns, the first two 
                       columns should be the x and y coordinates, and 
                       third should be the measurements of the variable
                       of interest
+            (pwdist)  the pairwise distances
             (lags)    the lagged distance of interest
             (tol)     the allowable tolerance about (lag)
-            (pwdist)  the pairwise distances, optional
     Output:           lag histogram figure showing the number of
                       distances at each lag
     '''
-    # calculate the pairwise distances if they are not given
-    if pwdist == None:
-        pwdist = pairwise( data[:,:2] )
     # collect the distances at each lag
     indices = [ variograms.lagindices( pwdist, lag, tol ) for lag in lags ]
     # record the number of indices at each lag
@@ -65,3 +62,59 @@ def laghistogram( data, lags, tol, pwdist=None ):
     ax.set_xlabel('Lag Distance')
     ax.set_title('Lag Histogram')
     show();
+    
+def svplot( data, lags, tol, model=None ):
+    '''
+    Input:  (data)    NumPy array with three columns, the first two 
+                      columns should be the x and y coordinates, and 
+                      third should be the measurements of the variable
+                      of interest
+            (lags)    the lagged distance of interest
+            (tol)     the allowable tolerance about (lag)
+            (model)   model function taking a distance and returning
+                      an approximation of the semivariance
+    Output:           empirical semivariogram
+    '''
+    h, sv = variograms.semivariogram( data, lags, tol )
+    sill = np.var( data[:,2] )
+    fig, ax = subplots()
+    if model:
+        ax.plot( h, model(h), 'r' )
+    ax.plot( h, sv, 'ko-' )
+    ax.set_ylabel('Semivariance')
+    ax.set_xlabel('Lag Distance')
+    ax.set_title('Semivariogram')
+    ax.text( tol*3, sill*1.025, str( np.round( sill, decimals=3 ) ) )
+    ax.axhline( sill, ls='--', color='k' )
+    show();
+
+def spaniplot( data, pwdist, lag, tol, angle, atol ):
+    '''
+    SPatial ANIsotropy PLOT
+    '''
+    index = variograms.lagindices( pwdist, lag, tol )
+    anindex = variograms.anilagindices( data, pwdist, lag, tol, angle, atol )
+    
+    fig, ax = subplots()
+
+    # plot the lagged distances
+    for pair in index:
+        head, tail = data[pair]
+        hx, hy, hz = head
+        tx, ty, tz = tail
+        x = [ hx, tx ]
+        y = [ hy, ty ]
+        ax.plot( x, y, 'k-', lw=2, alpha=0.25 )
+        
+    # plot the lagged distances within 
+    # the anisotropy angle and tolerance
+    for pair in anindex:
+        head, tail = data[pair]
+        hx, hy, hz = head
+        tx, ty, tz = tail
+        x = [ hx, tx ]
+        y = [ hy, ty ]
+        ax.plot( x, y, 'r-', lw=1 )
+        
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
