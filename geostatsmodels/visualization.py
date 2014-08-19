@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import numpy as np
+from pylab import *
+import matplotlib, numpy as np
 from geostatsmodels import variograms
 
 def hscattergram( data, pwdist, lag, tol ):
