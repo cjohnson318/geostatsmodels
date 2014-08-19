@@ -118,3 +118,19 @@ def spaniplot( data, pwdist, lag, tol, angle, atol ):
         
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
+
+# this is a colormap that ranges from yellow to purple to black
+cdict = {'red':   ((0.0, 1.0, 1.0),
+                   (0.5, 225/255., 225/255. ),
+                   (0.75, 0.141, 0.141 ),
+                   (1.0, 0.0, 0.0)),
+         'green': ((0.0, 1.0, 1.0),
+                   (0.5, 57/255., 57/255. ),
+                   (0.75, 0.0, 0.0 ),
+                   (1.0, 0.0, 0.0)),
+         'blue':  ((0.0, 0.376, 0.376),
+                   (0.5, 198/255., 198/255. ),
+                   (0.75, 1.0, 1.0 ),
+                   (1.0, 0.0, 0.0)) }
+                   
+YPcmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
