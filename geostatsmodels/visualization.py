@@ -23,7 +23,7 @@ def hscattergram( data, pwdist, lag, tol ):
     tail = data[ indices[:,1], 2 ]
     # create a scatterplot with equal axes
     fig, ax = subplots()
-    ax.scatter( head, tail, marker="o", facecolor="none", edgecolor="b", alpha=0.5 );
+    ax.scatter( head, tail, marker="o", facecolor="none", edgecolor="k", alpha=0.5 );
     ax.set_aspect("equal");
     # set the labels and the title
     ax.set_ylabel("$z(u+h)$");
