@@ -96,7 +96,7 @@ def spaniplot( data, pwdist, lag, tol, angle, atol ):
     index = variograms.lagindices( pwdist, lag, tol )
     anindex = variograms.anilagindices( data, pwdist, lag, tol, angle, atol )
     angle = ( angle + 180 ) % 360
-    aindex += variograms.anilagindices( data, pwdist, lag, tol, angle, atol )
+    anindex += variograms.anilagindices( data, pwdist, lag, tol, angle, atol )
     
     fig, ax = subplots()
 
