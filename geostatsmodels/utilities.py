@@ -100,7 +100,7 @@ def bearings( data, indices ):
     # for each lag-set, we go through all of the index-pairs, and calculate the bearing
     # in the end, instead of a list of lag-sets containing index-pairs,
     # we have a list of lag-sets containing bearings
-    return [ [ bearing( *data[ idx ] ) for idx in lag ] for lag in indices ]
+    return [ bearing( *data[ idx ] ) for idx in indices ]
 
 def inangle( theta, angle, atol ):
     '''
