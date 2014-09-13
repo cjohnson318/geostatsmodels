@@ -2,7 +2,7 @@
 
 from pylab import *
 import matplotlib, numpy as np
-from geostatsmodels import variograms
+from geostatsmodels import variograms, utilities
 
 def hscattergram( data, pwdist, lag, tol ):
     '''
@@ -64,7 +64,7 @@ def laghistogram( data, pwdist, lags, tol ):
     ax.set_title('Lag Histogram')
     show();
     
-def svplot( data, lags, tol, model=None ):
+def semivariogram( data, lags, tol, model=None ):
     '''
     Input:  (data)    NumPy array with three columns, the first two 
                       columns should be the x and y coordinates, and 
@@ -89,14 +89,12 @@ def svplot( data, lags, tol, model=None ):
     ax.axhline( sill, ls='--', color='k' )
     show();
 
-def spaniplot( data, pwdist, lag, tol, angle, atol ):
+def anisotropiclags( data, pwdist, lag, tol, angle, atol ):
     '''
     SPatial ANIsotropy PLOT
     '''
     index = variograms.lagindices( pwdist, lag, tol )
     anindex = variograms.anilagindices( data, pwdist, lag, tol, angle, atol )
-    angle = ( angle + 180 ) % 360
-    anindex += variograms.anilagindices( data, pwdist, lag, tol, angle, atol )
     
     fig, ax = subplots()
 
@@ -108,6 +106,10 @@ def spaniplot( data, pwdist, lag, tol, angle, atol ):
         x = [ hx, tx ]
         y = [ hy, ty ]
         ax.plot( x, y, 'k-', lw=2, alpha=0.25 )
+        # a sanity check
+        # mx, my = np.mean( x ), np.mean( y )
+        # br = utilities.bearing( ( hx, hy ), ( tx, ty ) )
+        # ax.text( mx, my, '{0:3.2f}'.format( br ) ) 
         
     # plot the lagged distances within 
     # the anisotropy angle and tolerance
