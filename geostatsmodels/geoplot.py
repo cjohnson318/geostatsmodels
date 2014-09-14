@@ -2,6 +2,9 @@
 
 from pylab import *
 import matplotlib, numpy as np
+import matplotlib.cm as cm
+import matplotlib.colors as colors
+import matplotlib.patches as mpatches
 from geostatsmodels import variograms, utilities
 
 def hscattergram( data, pwdist, lag, tol ):
@@ -123,6 +126,32 @@ def anisotropiclags( data, pwdist, lag, tol, angle, atol ):
         
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
+
+def polaranisotropy( data, pwdist, lags, tol, nsectors ):
+    angle = 360.0 / nsectors
+    atol = angle / 2.0
+    sectors = [ atol + i*angle for i in range( nsectors ) ]
+    
+    fig, ax = subplots()
+    cnorm = colors.Normalize( vmin=0, vmax=1 )
+    scalarmap = cm.ScalarMappable( norm=cnorm, cmap=cm.jet )
+    
+    for sector in sectors:
+        for lag in lags:
+            
+            anisodata = ( data, pwdist, lag, tol, sector, atol )
+            indices = variograms.anilagindices( *anisodata )
+            sv = variograms.semivariance( data, indices )
+            fc = scalarmap.to_rgba( sv )
+
+            center, r, width = (0,0), lag, lags[0]*2
+            theta1, theta2 = sector-atol, sector+atol
+            wedge = mpatches.Wedge( center, r, theta1, theta2, width, color=fc )
+            ax.add_patch( wedge )
+
+    ax.set_xlim( -lags[-1], lags[-1] )
+    ax.set_ylim( -lags[-1], lags[-1] )
+    ax.set_aspect('equal')
 
 # this is a colormap that ranges from yellow to purple to black
 cdict = {'red':   ((0.0, 1.0, 1.0),

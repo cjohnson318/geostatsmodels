@@ -142,7 +142,7 @@ geoplot.laghistogram( P, pw, lags, tolerance )
 
 # <markdowncell>
 
-# If we want to perform anisotropic kriging, we can visualize the distribution of the anisotropic lags using the spatial anisotropy plot--the `spaniplot()`
+# If we want to perform anisotropic kriging, we can visualize the distribution of the anisotropic lags using the `anisotropiclags()` function. Note that we use the bearing, which is measured in degrees, clockwise from North.
 
 # <codecell>
 
@@ -154,11 +154,7 @@ geoplot.anisotropiclags( P, pw, lag=2000, tol=250, angle=135, atol=15 )
 
 # <codecell>
 
-(330.43+180)%360
-
-# <codecell>
-
-135+15
+geoplot.polaranisotropy( P, pw, lags, tolerance, nsectors=12 )
 
 # <codecell>
 
