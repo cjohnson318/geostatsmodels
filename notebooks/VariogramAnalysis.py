@@ -154,5 +154,5 @@ geoplot.anisotropiclags( P, pw, lag=2000, tol=250, angle=135, atol=15 )
 
 # <codecell>
 
-geoplot.polaranisotropy( P, pw, lags, tolerance, nsectors=12 )
+geoplot.polaranisotropy( P, pw, lags, tolerance, nsectors=18 )
 

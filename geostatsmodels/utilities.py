@@ -50,7 +50,21 @@ def pairwise( data ):
         print "You have more than 10,000 data points, this might take a minute."
     # return the square distance matrix
     return squareform( pdist( data[:,:2] ) )
-    
+
+def degree_to_bearing( deg ):
+    bearing = None
+    if deg == None:
+        raise ValueError('Input "deg" cannot be "None"')
+    if( deg >= 0 )&( deg <= 90 ):
+        bearing = 90 - deg
+    elif( deg >= 90 )&( deg < 180 ):
+        bearing = 90 + 360 - deg
+    elif( deg >= 180 )&( deg < 270 ):
+        bearing = 90 + 360 - deg
+    elif( deg >= 270 )&( deg <= 360 ):
+        bearing = 90 + 360 - deg
+    return bearing
+
 def bearing( p0, p1 ):
     '''
     Input:  (p0,p1) two iterables representing x and y coordinates
@@ -74,16 +88,7 @@ def bearing( p0, p1 ):
         deg = 270 - deg
     elif( x > 0 )&( y < 0 ):
         deg = 360 + deg
-    bearing = None
-    if( deg >= 0 )&( deg <= 90 ):
-        bearing = 90 - deg
-    elif( deg >= 90 )&( deg < 180 ):
-        bearing = 90 + 360 - deg
-    elif( deg >= 180 )&( deg < 270 ):
-        bearing = 90 + 360 - deg
-    elif( deg >= 270 )&( deg <= 360 ):
-        bearing = 90 + 360 - deg
-    return bearing
+    return degree_to_bearing( deg )
 
 def bearings( data, indices ):
     '''

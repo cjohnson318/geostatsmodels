@@ -145,7 +145,8 @@ def polaranisotropy( data, pwdist, lags, tol, nsectors ):
             fc = scalarmap.to_rgba( sv )
 
             center, r, width = (0,0), lag, lags[0]*2
-            theta1, theta2 = sector-atol, sector+atol
+            theta1 = utilities.degree_to_bearing( sector+atol ) 
+            theta2 = utilities.degree_to_bearing( sector-atol )
             wedge = mpatches.Wedge( center, r, theta1, theta2, width, color=fc )
             ax.add_patch( wedge )
 
