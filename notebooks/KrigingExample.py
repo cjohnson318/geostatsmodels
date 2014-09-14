@@ -72,7 +72,7 @@ sill = np.var( P[:,2] )
 
 # <codecell>
 
-geoplot.svplot( P, lags, tolerance )
+geoplot.semivariogram( P, lags, tolerance )
 
 # <markdowncell>
 
@@ -81,7 +81,7 @@ geoplot.svplot( P, lags, tolerance )
 # <codecell>
 
 svm = model.semivariance( model.spherical, ( 4000, sill ) )
-geoplot.svplot( P, lags, tolerance, model=svm )
+geoplot.semivariogram( P, lags, tolerance, model=svm )
 
 # <markdowncell>
 
