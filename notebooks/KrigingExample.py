@@ -103,3 +103,15 @@ kriging.simple( P, covfct, pt, N=6 )
 
 kriging.ordinary( P, covfct, pt, N=6 )
 
+# <codecell>
+
+est, kstd = kriging.krige( P, covfct, [[2000,4700],[2100,4700],[2000,4800],[2100,4800]], 'simple', N=6 )
+
+# <codecell>
+
+est
+
+# <codecell>
+
+kstd
+
