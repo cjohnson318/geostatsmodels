@@ -1,7 +1,7 @@
 geostatsmodels
 ==============
 
-This is an extension of `cjohnson318`'s implementation of concepts from Clayton V. Deutsch and Michael Pyrcz's book _Geostatistical Reservoir Modeling_. 
+This is an extension of [cjohnson318](http://www.github.com/cjohnson318)'s implementation of concepts from Clayton V. Deutsch and Michael Pyrcz's book _Geostatistical Reservoir Modeling_, currently avaiable via [Oxford University Press](https://global.oup.com/academic/product/geostatistical-reservoir-modeling-9780199731442?cc=us&lang=en&). 
 
 This software is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
