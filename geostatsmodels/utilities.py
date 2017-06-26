@@ -47,7 +47,7 @@ def pairwise( data ):
     npoints, cols = data.shape
     # give a warning for large data sets
     if npoints > 10000:
-        print "You have more than 10,000 data points, this might take a minute."
+        print("You have more than 10,000 data points, this might take a minute.")
     # return the square distance matrix
     return squareform( pdist( data[:,:2] ) )
 
