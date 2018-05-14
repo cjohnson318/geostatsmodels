@@ -30,18 +30,18 @@ are in your path.
 
 To install geostatsmodels:
 
-pip install git+git://github.com/cjohnson318/geostatsmodels.git
+    pip install git+git://github.com/cjohnson318/geostatsmodels.git
 
 Uninstalling and Updating
 -------------------------
 
 To uninstall:
 
-pip uninstall geostatsmodels
+    pip uninstall geostatsmodels
 
 To update:
 
-pip install -U git+git://github.com/cjohnson318/geostatsmodels.git
+    pip install -U git+git://github.com/cjohnson318/geostatsmodels.git
 
 Usage
 ------
