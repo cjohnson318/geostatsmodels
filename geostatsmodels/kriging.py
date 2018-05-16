@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 from scipy.spatial.distance import cdist
-from utilities import pairwise
+from geostatsmodels.utilities import pairwise
 
 def kmatrices( data, covfct, u, N=0 ):
     '''
