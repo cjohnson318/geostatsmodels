@@ -55,7 +55,7 @@ def semivariance(data, indices):
     # the semivariance is half the mean squared difference
     i=indices[:, 0]
     j=indices[:, 1]
-    z=(data[i, 2]-data[j, 2])**2.0
+    z=(data[i, 2] - data[j, 2])**2.0
     return np.mean(z) / 2.0
 
 
