@@ -115,4 +115,4 @@ def variogram(data, lags, tol, method):
     elif method in ['covariogram', 'cov', 'co', 'cv', 'c']:
         v = [covariance(data, indices) for indices in index]
     # bundle the semivariogram values with their lags
-    return np.array(list(zip(lags, v))).T
+    return np.c_[lags, v].T
