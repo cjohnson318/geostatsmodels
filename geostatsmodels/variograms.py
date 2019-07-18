@@ -24,7 +24,7 @@ def lagindices(pwdist, lag, tol):
 
 def anilagindices(data, pwdist, lag, tol, angle, atol):
     '''
-    Input:  (data)   NumPy array where the fris t two columns
+    Input:  (data)   NumPy array where the frist two columns
                      are the spatial coordinates, x and y, and
                      the third column is the variable of interest
             (pwdist) square NumPy array of pairwise distances
@@ -36,16 +36,16 @@ def anilagindices(data, pwdist, lag, tol, angle, atol):
     index = lagindices(pwdist, lag, tol)
     brngs = utilities.bearings(data, index)
     bridx = list(zip(brngs, index))
-    index = [idx for br, idx in bridx if utilities.inangle(br, angle, atol)]
+    index = [idx.tolist() for br, idx in bridx if utilities.inangle(br, angle, atol)]
     # add 180 to the angle and take the modulus
     angle = (angle + 180) % 360
-    index += [idx for br, idx in bridx if utilities.inangle(br, angle, atol)]
-    return index
+    index += [idx.tolist() for br, idx in bridx if utilities.inangle(br, angle, atol)]
+    return np.array(index)
 
 
 def semivariance(data, indices):
     '''
-    Input:  (data)    NumPy array where the fris t two columns
+    Input:  (data)    NumPy array where the first two columns
                       are the spatial coordinates, x and y, and
                       the third column is the variable of interest
             (indices) indices of paired data points in (data)
@@ -62,7 +62,7 @@ def semivariance(data, indices):
 
 def semivariogram(data, lags, tol):
     '''
-    Input:  (data) NumPy array where the fris t two columns
+    Input:  (data) NumPy array where the first two columns
                    are the spatial coordinates, x and y
             (lag)  the distance, h, between points
             (tol)  the tolerance we are comfortable with around (lag)
@@ -73,7 +73,7 @@ def semivariogram(data, lags, tol):
 
 def covariance(data, indices):
     '''
-    Input:  (data) NumPy array where the fris t two columns
+    Input:  (data) NumPy array where the first two columns
                    are the spatial coordinates, x and y
             (lag)  the distance, h, between points
             (tol)  the tolerance we are comfortable with around (lag)
@@ -88,7 +88,7 @@ def covariance(data, indices):
 
 def covariogram(data, lags, tol):
     '''
-    Input:  (data) NumPy array where the fris t two columns
+    Input:  (data) NumPy array where the first two columns
                    are the spatial coordinates, x and y
             (lag)  the distance, h, between points
             (tol)  the tolerance we are comfortable with around (lag)
@@ -99,7 +99,7 @@ def covariogram(data, lags, tol):
 
 def variogram(data, lags, tol, method):
     '''
-    Input:  (data) NumPy array where the fris t two columns
+    Input:  (data) NumPy array where the first two columns
                    are the spatial coordinates, x and y
             (lag)  the distance, h, between points
             (tol)  the tolerance we are comfortable with around (lag)
