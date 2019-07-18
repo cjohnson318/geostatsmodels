@@ -125,19 +125,21 @@ def ordinary( data, covfct, u, N=0, nugget=0 ):
 
     return float( estimation ), kstd
 
-def krige( data, covfct, grid, method='simple', N=0, nugget=0 ):
+def krige(data, covfct, grid, method='simple', N=0, nugget=0):
     '''
     Krige an <Nx2> array of points representing a grid.
     
     Use either simple or ordinary kriging, some number N
     of neighboring points, and a nugget value.
     '''
+    kriging_method = None
     if method == 'simple':
-        k = lambda d, c, u, N, nug: simple( d, c, u, N, nug ) 
+        kriging_method = simple 
     elif method == 'ordinary':
-        k = lambda d, c, u, N, nug: ordinary( d, c, u, N, nug )
-    M = len( grid )
-    est, kstd = np.zeros(( M, 1 )), np.zeros(( M, 1 ))
-    for i in range( M ):
-        est[i], kstd[i] = k( data, covfct, grid[i], N, nugget )
+        kriging_method = ordinary
+    M = len(grid)
+    est = np.zeros((M, 1))
+    kstd = np.zeros((M, 1))
+    for i in range(M):
+        est[i], kstd[i] = kriging_method(data, covfct, grid[i], N, nugget)
     return est, kstd
