@@ -1,9 +1,9 @@
 geostatsmodels
 ==============
 
-I am implementing ideas from Clayton V. Deutsch and Michael Pyrcz's book _Geostatistical Reservoir Modeling_ in order to better understand geostatistics. I am working through things first in Python in order to prototype things quickly and make sure I understand them. Later I will try to optimize the code for speed.
+This is an implementation of ideas from Clayton V. Deutsch and Michael Pyrcz's book _Geostatistical Reservoir Modeling_ in order to better understand geostatistics. I am working through things first in Python in order to prototype things quickly and make sure I understand them.
 
-I used http://people.ku.edu/~gbohling/cpe940 as a starting point to understand kriging. There is also an R package for geostatistics named gstat, but I have not used it yet.
+There is also an R package for geostatistics named gstat, but I have not used it much.
 
 This software is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
@@ -11,19 +11,15 @@ Installation and Dependencies
 -----------------------------
 
 This package depends on:
- * numpy, the fundamental package for scientific computing with Python. <a href="http://www.numpy.org/">http://www.numpy.org/</a>  
- * matplotlib, a Python 2D plotting library which produces publication quality figures. <a href="<a href="http://matplotlib.org/index.html">http://matplotlib.org/index.html</a>
- * scipy, a Python library which provides many user-friendly and efficient numerical routines such as routines for numerical integration and optimization. <a href="<a href="http://www.scipy.org/scipylib/index.html">http://www.scipy.org/scipylib/index.html</a>
- * pandas, a Python library which implements excellent tools for data analysis and modeling. 
+ * `numpy`, the fundamental package for scientific computing with Python. 
+ * `matplotlib`, a Python 2D plotting library which produces publication quality figures. 
+ * scipy, a Python library which provides many user-friendly and efficient numerical routines such as routines for numerical integration and optimization. 
+ * `pandas`, a Python library which implements excellent tools for data analysis and modeling. 
 
-The best/easiest way to install these packages is to use one of the Python distributions described here:
+The best/easiest way to install these packages is to use one of the Python distributions described [here](http://www.scipy.org/install.html). Anaconda has been successfully tested with geostatsmodels.
 
-<a href="http://www.scipy.org/install.html">http://www.scipy.org/install.html</a>
-
-Anaconda has been successfully tested with geostatsmodels.
-
-Most of those distributions should include <em>pip</em>, a command line tool for installing and 
-managing Python packages.  You can use pip to install geostatsmodels itself.  
+Most of those distributions should include `pip` or `conda`, which are command line tools for installing and 
+managing Python packages.  You can use `pip` to install geostatsmodels itself.  
  
 You may need to open a new terminal window to ensure that the newly installed versions of python and pip
 are in your path.
@@ -45,11 +41,11 @@ To update:
 
 Usage
 ------
-Some notebooks exploring some of the functionality of geostatsmodels is included in this repository.  
+Some notebooks exploring the functionality of `geostatsmodels` are included below.  
 
 [Variogram Analysis](http://nbviewer.ipython.org/github/cjohnson318/geostatsmodels/blob/master/notebooks/VariogramAnalysis.ipynb)
 
 [Kriging Example](http://nbviewer.ipython.org/github/cjohnson318/geostatsmodels/blob/master/notebooks/KrigingExample.ipynb)
 
-More of these will follow.
+More to come!
 
