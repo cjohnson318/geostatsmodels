@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import scipy, scipy.stats, numpy as np
+import scipy
+import scipy.stats
+import numpy as np
 from scipy.spatial.distance import pdist, squareform
 
 def readGeoEAS( fn ):

@@ -1,7 +1,9 @@
 geostatsmodels
 ==============
 
-This is an extension of [cjohnson318](http://www.github.com/cjohnson318)'s implementation of concepts from Clayton V. Deutsch and Michael Pyrcz's book _Geostatistical Reservoir Modeling_, currently available via [Oxford University Press](https://global.oup.com/academic/product/geostatistical-reservoir-modeling-9780199731442?cc=us&lang=en&). 
+This is an implementation of ideas from Clayton V. Deutsch and Michael Pyrcz's book _Geostatistical Reservoir Modeling_ in order to better understand geostatistics. I am working through things first in Python in order to prototype things quickly and make sure I understand them.
+
+There is also an R package for geostatistics named gstat, but I have not used it much.
 
 This software is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
@@ -24,18 +26,18 @@ are in your path.
 
 To install geostatsmodels:
 
-pip install git+git://github.com/cjohnson318/geostatsmodels.git
+    pip install git+git://github.com/cjohnson318/geostatsmodels.git
 
 Uninstalling and Updating
 -------------------------
 
 To uninstall:
 
-pip uninstall geostatsmodels
+    pip uninstall geostatsmodels
 
 To update:
 
-pip install -U git+git://github.com/cjohnson318/geostatsmodels.git
+    pip install -U git+git://github.com/cjohnson318/geostatsmodels.git
 
 Usage
 ------

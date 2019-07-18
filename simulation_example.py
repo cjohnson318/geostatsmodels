@@ -27,7 +27,7 @@ m = s.sgs( d, k.spherical, lags, tol, 5, 5 )
 # use the [:,::-1].T to a) reverse the order of the columns
 # and then b) transpose the data, this takes it from Python
 # conventions, back to the way we normally think of spatial data
-print m[:,::-1].T
+print(m[:,::-1].T)
 
 '''
 Printing m, you should see something like the following output.
@@ -49,7 +49,7 @@ matshow( m[:,::-1].T, cmap=u.YPcmap )
 # perform the back-transformation
 n = u.from_norm( m, inv )
 
-print n[:,::-1].T
+print(n[:,::-1].T)
 
 '''
 The back-transformed data should look something like this:
