@@ -16,11 +16,9 @@ def lagindices(pwdist, lag, tol):
     '''
     # grab the coordinates in a given range: lag +/- tolerance
     i, j = np.where((pwdist >= lag - tol) & (pwdist < lag + tol))
-    # zip the coordinates into a list
-    indices = list(zip(i, j))
     # take out the repeated elements,
     # since p is a *symmetric* distance matrix
-    indices = np.array([i for i in indices if i[1] > i[0]])
+    indices=np.c_[i, j][np.where(j > i)]
     return indices
 
 
@@ -55,8 +53,10 @@ def semivariance(data, indices):
     '''
     # take the squared difference between
     # the values of the variable of interest
-    z = [(data[i, 2] - data[j, 2])**2.0 for i, j in indices]
     # the semivariance is half the mean squared difference
+    i=indices[:, 0]
+    j=indices[:, 1]
+    z=(data[i, 2] - data[j, 2])**2.0
     return np.mean(z) / 2.0
 
 
@@ -81,11 +81,9 @@ def covariance(data, indices):
     '''
     # grab the indices of the points
     # that are lag +/- tolerance apart
-    m_tail = np.mean([data[i, 2] for i, j in indices])
-    m_head = np.mean([data[j, 2] for i, j in indices])
-    m = m_tail * m_head
-    z = [data[i, 2] * data[j, 2] - m for i, j in indices]
-    return np.mean(z)
+    i=indices[:, 0]
+    j=indices[:, 1]
+    return np.cov(data[i, 2], data[j, 2])[0][1]
 
 
 def covariogram(data, lags, tol):
@@ -118,4 +116,4 @@ def variogram(data, lags, tol, method):
     elif method in ['covariogram', 'cov', 'co', 'cv', 'c']:
         v = [covariance(data, indices) for indices in index]
     # bundle the semivariogram values with their lags
-    return np.array(list(zip(lags, v))).T
+    return np.c_[lags, v].T
