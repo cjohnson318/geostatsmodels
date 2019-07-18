@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='geostatsmodels',
-      version='0.2.0',
+      version='0.3.0',
       description='Geostatistics models',
       author='Connor Johnson',
       author_email='connor.labaume.johnson@gmail.com',
