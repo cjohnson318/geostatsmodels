@@ -54,5 +54,8 @@ docs/_build/
 # PyBuilder
 target/
 
-#IPython
+# IPython
 .ipynb_checkpoints
+
+# VSCode
+.vscode

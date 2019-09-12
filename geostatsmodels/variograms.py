@@ -110,6 +110,8 @@ def variogram(data, lags, tol, method):
     pwdist = utilities.pairwise(data)
     # create a list of lists of indices of points having the ~same lag
     index = [lagindices(pwdist, lag, tol) for lag in lags]
+    # remove empty "lag" sets, prevents zero division error in [co|semi]variance()
+    index = list(filter(lambda x: len(x) > 0, index))
     # calculate the variogram at different lags given some tolerance
     if method in ['semivariogram', 'semi', 'sv', 's']:
         v = [semivariance(data, indices) for indices in index]
