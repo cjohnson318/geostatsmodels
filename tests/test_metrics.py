@@ -70,16 +70,16 @@ class metrics_cases( unittest.TestCase ):
 		c = m.geary_c( data )
 		'''
 		R code used to retrieve the answer value:
-			library(ape)
+			library(spdep)
 			library(sp)
 			data(meuse)
 			coordinates(meuse) <- ~x+y
 			proj4string(meuse) <- CRS("+init=epsg:28992")
 			w <- 1/as.matrix(dist(coordinates(meuse)))
 			diag(w) <- 0
-			Moran.I(meuse$copper, w)
+			geary.test(meuse$lead, mat2listw(w))
 		'''
-		ans = 0.9051519135 
+		ans = 0.9051519135
 		print("C = ", c, ", answer = ", ans)
 		self.assertTrue( abs( ans - c ) < eps )
 

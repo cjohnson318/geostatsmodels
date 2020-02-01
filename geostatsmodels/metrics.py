@@ -13,7 +13,7 @@ def moran_i(data, w=None):
 	
 	# create weights matrix
 	weights = 1 / distances
-	np.fill_diagonal(weights, 0)	
+	np.fill_diagonal(weights, 0)
 	
 	# or use weights submitted as parameter
 	weights = w or weights
@@ -62,7 +62,7 @@ def geary_c(data, w=None):
 	
 	# create weights matrix
 	weights = 1 / distances
-	np.fill_diagonal(weights, 0)	
+	np.fill_diagonal(weights, 0)
 	
 	# or use weights submitted as parameter
 	weights = w or weights
@@ -75,11 +75,6 @@ def geary_c(data, w=None):
 	nom   = 0.0
 	denom = 0.0
 	mean  = np.mean(values)
-	
-	# normalize weights
-	rowsum = np.sum(weights, axis=0)
-	rowsum[rowsum == 0] = 1
-	weights = weights / rowsum
 	
 	# compute numerator's double sum
 	for i in range(n):
