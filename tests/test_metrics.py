@@ -13,7 +13,7 @@ eps = 0.0001
 class metrics_cases( unittest.TestCase ):
 	'''Tests for metrics.py'''
 	
-	def test_moran_i_meause_lead( self ):
+	def test_moran_i_meuse_lead( self ):
 		data = meuse[["x", "y", "lead"]].to_numpy()
 		'''
 		Does moran_i() return a result within
@@ -35,7 +35,7 @@ class metrics_cases( unittest.TestCase ):
 		print("I = ",i, ", answer = ", ans, ", expected = ", e)
 		self.assertTrue( abs( ans - i ) < eps )
 		
-	def test_moran_i_meause_copper( self ):
+	def test_moran_i_meuse_copper( self ):
 		
 		data = meuse[["x", "y", "copper"]].to_numpy()
 		
@@ -58,6 +58,30 @@ class metrics_cases( unittest.TestCase ):
 		ans = 0.09301739
 		print("I = ",i, ", answer = ", ans, ", expected = ", e)
 		self.assertTrue( abs( ans - i ) < eps )
+		
+	def test_geary_c_meuse_lead( self ):
+		
+		data = meuse[["x", "y", "lead"]].to_numpy()
+		
+		'''
+		Does geary_c() return a result within
+		eps=0.0001 of a benchmarked value?
+		'''
+		c = m.geary_c( data )
+		'''
+		R code used to retrieve the answer value:
+			library(ape)
+			library(sp)
+			data(meuse)
+			coordinates(meuse) <- ~x+y
+			proj4string(meuse) <- CRS("+init=epsg:28992")
+			w <- 1/as.matrix(dist(coordinates(meuse)))
+			diag(w) <- 0
+			Moran.I(meuse$copper, w)
+		'''
+		ans = 0.09301739
+		print("C = ", c, ", answer = ", ans)
+		self.assertTrue( abs( ans - c ) < eps )
 
 if __name__ == '__main__':
     unittest.main()
