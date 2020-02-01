@@ -79,7 +79,7 @@ class metrics_cases( unittest.TestCase ):
 			diag(w) <- 0
 			Moran.I(meuse$copper, w)
 		'''
-		ans = 0.09301739
+		ans = 0.9051519135 
 		print("C = ", c, ", answer = ", ans)
 		self.assertTrue( abs( ans - c ) < eps )
 
